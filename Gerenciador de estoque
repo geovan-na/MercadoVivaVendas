@@ -1,0 +1,136 @@
+package br.com.mercadojava.servico;
+
+import br.com.mercadojava.modelo.Produto;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class GerenciadorDeEstoque {
+    private ArrayList<Produto> produtos;
+    private Scanner scanner;
+    
+    public GerenciadorDeEstoque() {
+        produtos = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+    
+    // Método para adicionar produto
+    public void adicionarProduto() {
+        System.out.println("\n=== ADICIONAR PRODUTO ===");
+        System.out.print("Nome do produto: ");
+        String nome = scanner.nextLine();
+        
+        System.out.print("Código de barras: ");
+        String codigo = scanner.nextLine();
+        
+        System.out.print("Preço: R$ ");
+        double preco = scanner.nextDouble();
+        
+        System.out.print("Quantidade em estoque: ");
+        int quantidade = scanner.nextInt();
+        scanner.nextLine(); // Limpar buffer
+        
+        Produto novoProduto = new Produto(nome, codigo, preco, quantidade);
+        produtos.add(novoProduto);
+        
+        System.out.println("Produto adicionado com sucesso!");
+    }
+    
+    // Método para listar todos os produtos
+    public void listarProdutos() {
+        System.out.println("\n=== LISTA DE PRODUTOS ===");
+        if (produtos.isEmpty()) {
+            System.out.println("Nenhum produto cadastrado.");
+        } else {
+            for (int i = 0; i < produtos.size(); i++) {
+                System.out.println((i + 1) + ". " + produtos.get(i));
+            }
+        }
+    }
+    
+    // Método para atualizar estoque
+    public void atualizarEstoque() {
+        System.out.println("\n=== ATUALIZAR ESTOQUE ===");
+        listarProdutos();
+        
+        if (!produtos.isEmpty()) {
+            System.out.print("Escolha o número do produto: ");
+            int index = scanner.nextInt() - 1;
+            scanner.nextLine();
+            
+            if (index >= 0 && index < produtos.size()) {
+                System.out.print("Quantidade a adicionar/remover (+/-): ");
+                int quantidade = scanner.nextInt();
+                scanner.nextLine();
+                
+                if (quantidade > 0) {
+                    produtos.get(index).adicionarEstoque(quantidade);
+                    System.out.println("Estoque atualizado!");
+                } else if (quantidade < 0) {
+                    produtos.get(index).removerEstoque(Math.abs(quantidade));
+                    System.out.println("Estoque atualizado!");
+                }
+            } else {
+                System.out.println("Produto não encontrado!");
+            }
+        }
+    }
+    
+    // Método para buscar produto por código
+    public void buscarProduto() {
+        System.out.println("\n=== BUSCAR PRODUTO ===");
+        System.out.print("Digite o código de barras: ");
+        String codigo = scanner.nextLine();
+        
+        for (Produto produto : produtos) {
+            if (produto.getCodigoDeBarras().equalsIgnoreCase(codigo)) {
+                System.out.println("Produto encontrado: " + produto);
+                return;
+            }
+        }
+        System.out.println("Produto não encontrado!");
+    }
+    
+    // Método para exibir menu
+    public void exibirMenu() {
+        int opcao;
+        do {
+            System.out.println("\n=== GERENCIADOR DE ESTOQUE ===");
+            System.out.println("1. Adicionar Produto");
+            System.out.println("2. Listar Produtos");
+            System.out.println("3. Atualizar Estoque");
+            System.out.println("4. Buscar Produto");
+            System.out.println("5. Sair");
+            System.out.print("Escolha uma opção: ");
+            
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar buffer
+            
+            switch (opcao) {
+                case 1:
+                    adicionarProduto();
+                    break;
+                case 2:
+                    listarProdutos();
+                    break;
+                case 3:
+                    atualizarEstoque();
+                    break;
+                case 4:
+                    buscarProduto();
+                    break;
+                case 5:
+                    System.out.println("Saindo do sistema...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while (opcao != 5);
+    }
+    
+    public static void main(String[] args) {
+        GerenciadorDeEstoque gerenciador = new GerenciadorDeEstoque();
+        gerenciador.exibirMenu();
+    }
+}
+
+
