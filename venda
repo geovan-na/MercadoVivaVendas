@@ -1,0 +1,41 @@
+package br.com.mercadojava.modelo;
+
+public class Venda extends Produto {
+    private double valorTotal;
+    private String formaPagamento;
+
+    public Venda(int idProduto, String nomeProduto, double preco, double valorTotal, String formaPagamento) {
+        super(idProduto, nomeProduto, preco);
+        this.valorTotal = valorTotal;
+        this.formaPagamento = formaPagamento;
+    }
+
+    // Getters e Setters
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public double calcularImposto() {
+        return getPreco() * 0.;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Venda #%d - R$ %.2f - %s",
+            getIdProduto(),
+            getValorTotal(),
+            getFormaPagamento());
+    }
+}
