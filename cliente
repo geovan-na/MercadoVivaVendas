@@ -1,0 +1,39 @@
+package br.com.mercadojava.modelo;
+
+public class Cliente {
+	
+    private int idCliente;
+    private String nomeCliente;
+    private String cpfCliente;
+    private String foneCliente;
+
+    
+    public Cliente(int idCliente, String nomeCliente, String cpfCliente, String foneCliente) {
+        this.idCliente = idCliente;
+        this.nomeCliente = nomeCliente;
+        this.cpfCliente = cpfCliente;
+        this.foneCliente = foneCliente;
+    }
+    
+    
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public String getCpfCliente() {
+        return cpfCliente;
+    }
+
+    public String getFoneCliente() {
+        return foneCliente;
+    }
+
+    
+    public String getNomeId() {
+        return idCliente + " - " + nomeCliente;
+    }
+}
