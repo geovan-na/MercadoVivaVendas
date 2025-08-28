@@ -1,136 +1,132 @@
 package br.com.mercadojava.servico;
 
-import br.com.mercadojava.modelo.Produto;
-import java.util.ArrayList;
 import java.util.Scanner;
+import br.com.mercadojava.modelo.Produto;
 
 public class GerenciadorDeEstoque {
-    private ArrayList<Produto> produtos;
+    private Produto produto1;
+    private Produto produto2;
+    private Produto produto3;
     private Scanner scanner;
-    
+    private int quantidadeProdutos;
+
     public GerenciadorDeEstoque() {
-        produtos = new ArrayList<>();
         scanner = new Scanner(System.in);
+        quantidadeProdutos = 0;
     }
-    
-    // Método para adicionar produto
-    public void adicionarProduto() {
-        System.out.println("\n=== ADICIONAR PRODUTO ===");
-        System.out.print("Nome do produto: ");
-        String nome = scanner.nextLine();
-        
-        System.out.print("Código de barras: ");
-        String codigo = scanner.nextLine();
-        
-        System.out.print("Preço: R$ ");
-        double preco = scanner.nextDouble();
-        
-        System.out.print("Quantidade em estoque: ");
-        int quantidade = scanner.nextInt();
-        scanner.nextLine(); // Limpar buffer
-        
-        Produto novoProduto = new Produto(nome, codigo, preco, quantidade);
-        produtos.add(novoProduto);
-        
-        System.out.println("Produto adicionado com sucesso!");
-    }
-    
-    // Método para listar todos os produtos
-    public void listarProdutos() {
-        System.out.println("\n=== LISTA DE PRODUTOS ===");
-        if (produtos.isEmpty()) {
-            System.out.println("Nenhum produto cadastrado.");
-        } else {
-            for (int i = 0; i < produtos.size(); i++) {
-                System.out.println((i + 1) + ". " + produtos.get(i));
-            }
-        }
-    }
-    
-    // Método para atualizar estoque
-    public void atualizarEstoque() {
-        System.out.println("\n=== ATUALIZAR ESTOQUE ===");
-        listarProdutos();
-        
-        if (!produtos.isEmpty()) {
-            System.out.print("Escolha o número do produto: ");
-            int index = scanner.nextInt() - 1;
-            scanner.nextLine();
-            
-            if (index >= 0 && index < produtos.size()) {
-                System.out.print("Quantidade a adicionar/remover (+/-): ");
-                int quantidade = scanner.nextInt();
-                scanner.nextLine();
-                
-                if (quantidade > 0) {
-                    produtos.get(index).adicionarEstoque(quantidade);
-                    System.out.println("Estoque atualizado!");
-                } else if (quantidade < 0) {
-                    produtos.get(index).removerEstoque(Math.abs(quantidade));
-                    System.out.println("Estoque atualizado!");
-                }
-            } else {
-                System.out.println("Produto não encontrado!");
-            }
-        }
-    }
-    
-    // Método para buscar produto por código
-    public void buscarProduto() {
-        System.out.println("\n=== BUSCAR PRODUTO ===");
-        System.out.print("Digite o código de barras: ");
-        String codigo = scanner.nextLine();
-        
-        for (Produto produto : produtos) {
-            if (produto.getCodigoDeBarras().equalsIgnoreCase(codigo)) {
-                System.out.println("Produto encontrado: " + produto);
-                return;
-            }
-        }
-        System.out.println("Produto não encontrado!");
-    }
-    
-    // Método para exibir menu
-    public void exibirMenu() {
+
+    public void iniciar() {
         int opcao;
         do {
-            System.out.println("\n=== GERENCIADOR DE ESTOQUE ===");
-            System.out.println("1. Adicionar Produto");
-            System.out.println("2. Listar Produtos");
-            System.out.println("3. Atualizar Estoque");
-            System.out.println("4. Buscar Produto");
-            System.out.println("5. Sair");
+            System.out.println("\n=== SISTEMA DE GESTÃO DE ESTOQUE ===");
+            System.out.println("1. Cadastrar produto");
+            System.out.println("2. Listar produtos");
+            System.out.println("3. Buscar produto por ID");
+            System.out.println("4. Sair");
             System.out.print("Escolha uma opção: ");
             
             opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpar buffer
+            scanner.nextLine(); // Limpar o buffer
             
-            switch (opcao) {
-                case 1:
-                    adicionarProduto();
-                    break;
-                case 2:
-                    listarProdutos();
-                    break;
-                case 3:
-                    atualizarEstoque();
-                    break;
-                case 4:
-                    buscarProduto();
-                    break;
-                case 5:
-                    System.out.println("Saindo do sistema...");
-                    break;
-                default:
-                    System.out.println("Opção inválida!");
+            if (opcao == 1) {
+                cadastrarProduto();
+            } else if (opcao == 2) {
+                listarProdutos();
+            } else if (opcao == 3) {
+                buscarProdutoPorId();
+            } else if (opcao == 4) {
+                System.out.println("Saindo do sistema...");
+            } else {
+                System.out.println("Opção inválida! Tente novamente.");
             }
-        } while (opcao != 5);
+        } while (opcao != 4);
     }
-    
+
+    private void cadastrarProduto() {
+        if (quantidadeProdutos >= 3) {
+            System.out.println("Limite máximo de 3 produtos atingido!");
+            return;
+        }
+
+        System.out.println("\n--- CADASTRAR PRODUTO ---");
+        System.out.print("ID do produto: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Nome do produto: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Preço do produto: ");
+        double preco = scanner.nextDouble();
+        scanner.nextLine();
+
+        Produto novoProduto = new Produto(id, nome, preco);
+
+        if (quantidadeProdutos == 0) {
+            produto1 = novoProduto;
+        } else if (quantidadeProdutos == 1) {
+            produto2 = novoProduto;
+        } else {
+            produto3 = novoProduto;
+        }
+
+        quantidadeProdutos++;
+        System.out.println("Produto cadastrado com sucesso!");
+    }
+
+    private void listarProdutos() {
+        System.out.println("\n--- LISTA DE PRODUTOS ---");
+
+        if (quantidadeProdutos == 0) {
+            System.out.println("Nenhum produto cadastrado.");
+            return;
+        }
+
+        if (produto1 != null) {
+            System.out.println("ID: " + produto1.getIdProduto() +
+                    " | Nome: " + produto1.getNomeProduto() +
+                    " | Preço: R$ " + produto1.getPreco());
+        }
+
+        if (produto2 != null) {
+            System.out.println("ID: " + produto2.getIdProduto() +
+                    " | Nome: " + produto2.getNomeProduto() +
+                    " | Preço: R$ " + produto2.getPreco());
+        }
+
+        if (produto3 != null) {
+            System.out.println("ID: " + produto3.getIdProduto() +
+                    " | Nome: " + produto3.getNomeProduto() +
+                    " | Preço: R$ " + produto3.getPreco());
+        }
+    }
+
+    private void buscarProdutoPorId() {
+        System.out.println("\n--- BUSCAR PRODUTO POR ID ---");
+        System.out.print("Digite o ID do produto: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        if (produto1 != null && produto1.getIdProduto() == id) {
+            exibirProduto(produto1);
+        } else if (produto2 != null && produto2.getIdProduto() == id) {
+            exibirProduto(produto2);
+        } else if (produto3 != null && produto3.getIdProduto() == id) {
+            exibirProduto(produto3);
+        } else {
+            System.out.println("Produto com ID " + id + " não encontrado.");
+        }
+    }
+
+    private void exibirProduto(Produto produto) {
+        System.out.println("Produto encontrado:");
+        System.out.println("ID: " + produto.getIdProduto());
+        System.out.println("Nome: " + produto.getNomeProduto());
+        System.out.println("Preço: R$ " + produto.getPreco());
+    }
+
     public static void main(String[] args) {
-        GerenciadorDeEstoque gerenciador = new GerenciadorDeEstoque();
-        gerenciador.exibirMenu();
+        GerenciadorDeEstoque gestao = new GerenciadorDeEstoque();
+        gestao.iniciar();
     }
 }
-
-
