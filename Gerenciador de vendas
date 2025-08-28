@@ -1,0 +1,171 @@
+package br.com.mercadojava.servico;
+
+import br.com.mercadojava.modelo.Venda;
+import java.util.Scanner;
+
+public class GerenciadorDeVendas {
+    private Venda venda1;
+    private Venda venda2;
+    private Venda venda3;
+    private int quantidadeVendas;
+    private Scanner scanner;
+
+    public GerenciadorDeVendas() {
+        scanner = new Scanner(System.in);
+        quantidadeVendas = 0;
+    }
+
+    public void iniciar() {
+        String entrada = "";
+
+        do {
+            System.out.println("\n=== SISTEMA DE GESTÃO DE VENDAS ===");
+            System.out.println("1. Cadastrar venda");
+            System.out.println("2. Listar vendas");
+            System.out.println("3. Buscar venda por ID do produto");
+            System.out.println("4. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            entrada = scanner.nextLine();
+
+            if (entrada.equals("1")) {
+                cadastrarVenda();
+            } else if (entrada.equals("2")) {
+                listarVendas();
+            } else if (entrada.equals("3")) {
+                buscarVendaPorId();
+            } else if (entrada.equals("4")) {
+                System.out.println("Saindo do sistema de vendas...");
+            } else {
+                System.out.println("Opção inválida! Tente novamente.");
+            }
+
+        } while (!entrada.equals("4"));
+    }
+
+    private void cadastrarVenda() {
+        if (quantidadeVendas >= 3) {
+            System.out.println("Limite máximo de 3 vendas atingido!");
+            return;
+        }
+
+        System.out.println("\n--- CADASTRAR VENDA ---");
+
+        int idProduto;
+        while (true) {
+            System.out.print("ID do produto (número): ");
+            try {
+                idProduto = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("ID inválido! Digite um número inteiro.");
+            }
+        }
+
+        System.out.print("Nome do produto: ");
+        String nomeProduto = scanner.nextLine();
+
+        double preco;
+        while (true) {
+            System.out.print("Preço do produto: ");
+            try {
+                preco = Double.parseDouble(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Preço inválido! Digite um número válido (ex: 10.5).");
+            }
+        }
+
+        double valorTotal;
+        while (true) {
+            System.out.print("Valor total da venda: ");
+            try {
+                valorTotal = Double.parseDouble(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido! Digite um número válido.");
+            }
+        }
+
+        System.out.print("Forma de pagamento: ");
+        String formaPagamento = scanner.nextLine();
+
+        Venda novaVenda = new Venda(idProduto, nomeProduto, preco, valorTotal, formaPagamento);
+
+        if (quantidadeVendas == 0) {
+            venda1 = novaVenda;
+        } else if (quantidadeVendas == 1) {
+            venda2 = novaVenda;
+        } else {
+            venda3 = novaVenda;
+        }
+
+        quantidadeVendas++;
+        System.out.println("Venda cadastrada com sucesso!");
+    }
+
+    private void listarVendas() {
+        System.out.println("\n--- LISTA DE VENDAS ---");
+
+        if (quantidadeVendas == 0) {
+            System.out.println("Nenhuma venda cadastrada.");
+            return;
+        }
+
+        if (venda1 != null) {
+            System.out.println(venda1.toString());
+        }
+
+        if (venda2 != null) {
+            System.out.println(venda2.toString());
+        }
+
+        if (venda3 != null) {
+            System.out.println(venda3.toString());
+        }
+    }
+
+    private void buscarVendaPorId() {
+        System.out.println("\n--- BUSCAR VENDA POR ID DO PRODUTO ---");
+
+        int idBusca;
+        while (true) {
+            System.out.print("Digite o ID do produto: ");
+            try {
+                idBusca = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("ID inválido! Digite um número inteiro.");
+            }
+        }
+
+        boolean encontrada = false;
+
+        if (venda1 != null && venda1.getIdProduto() == idBusca) {
+            System.out.println("Venda encontrada:");
+            System.out.println(venda1);
+            encontrada = true;
+        }
+
+        if (venda2 != null && venda2.getIdProduto() == idBusca) {
+            System.out.println("Venda encontrada:");
+            System.out.println(venda2);
+            encontrada = true;
+        }
+
+        if (venda3 != null && venda3.getIdProduto() == idBusca) {
+            System.out.println("Venda encontrada:");
+            System.out.println(venda3);
+            encontrada = true;
+        }
+
+        if (!encontrada) {
+            System.out.println("Nenhuma venda encontrada com o ID informado.");
+        }
+    }
+
+    public static void main(String[] args) {
+        GerenciadorDeVendas gerenciador = new GerenciadorDeVendas();
+        gerenciador.iniciar();
+    }
+}
