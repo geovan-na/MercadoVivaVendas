@@ -1,0 +1,56 @@
+package br.com.mercadojava.app;
+
+import br.com.mercadojava.servico.GerenciadorDeEstoque;
+import br.com.mercadojava.servico.GerenciadorDeVendas;
+import java.util.Scanner;
+
+/**
+ * Classe principal do sistema MercadoJava.
+ * Responsável por iniciar a aplicação e gerenciar o menu principal.
+ */
+public class MercadoApp {
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        // Criando instâncias dos gerentes para lidar com as funcionalidades
+        GerenciadorDeEstoque gerenciadorEstoque = new GerenciadorDeEstoque();
+        GerenciadorDeVendas gerenciadorVendas = new GerenciadorDeVendas();
+
+        int opcao;
+        
+        // Loop principal do sistema que exibe o menu até que o usuário escolha sair
+        do {
+            System.out.println("\n=== BEM-VINDO AO SISTEMA MERCADOJAVA ===");
+            System.out.println("1. Acessar Gestão de Estoque");
+            System.out.println("2. Acessar Gestão de Vendas");
+            System.out.println("3. Sair do Sistema");
+            System.out.print("Escolha uma opção: ");
+
+            // Tratamento de erro para garantir que a entrada seja um número
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entrada inválida. Digite um número.");
+                scanner.next(); // Limpa a entrada inválida
+            }
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer de entrada
+
+            switch (opcao) {
+                case 1:
+                    // Chama o método 'iniciar' do gerenciador de estoque
+                    gerenciadorEstoque.iniciar();
+                    break;
+                case 2:
+                    // Chama o método 'iniciar' do gerenciador de vendas
+                    gerenciadorVendas.iniciar();
+                    break;
+                case 3:
+                    System.out.println("Encerrando o sistema. Até mais!");
+                    break;
+                default:
+                    System.out.println("Opção inválida! Por favor, escolha uma opção entre 1 e 3.");
+            }
+        } while (opcao != 3);
+
+        scanner.close(); // Fecha o scanner para liberar recursos
+    }
+}
